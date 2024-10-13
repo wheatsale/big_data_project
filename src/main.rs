@@ -5,6 +5,8 @@ use axum::{
     Router,
 };
 use serde::Deserialize;
+use std::env;
+
 
 #[derive(Deserialize, Debug)]
 #[allow(dead_code)]
@@ -25,7 +27,12 @@ async fn main() {
 
     .route("/echo_user_input", post(accept_form));
 
-    let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();
+    let port = match env::var("PORT") {
+        Ok(val) => val,
+        Err(_) => String::from("80"),
+    };
+
+    let listener = tokio::net::TcpListener::bind(format!("0.0.0.0:{port}")).await.unwrap();
     axum::serve(listener, app).await.unwrap();
 }
 
