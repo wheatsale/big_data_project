@@ -25,7 +25,7 @@ async fn main() {
 
     .route("/echo_user_input", post(accept_form));
 
-    let listener = tokio::net::TcpListener::bind("0.0.0.0:8080").await.unwrap();
+    let listener = tokio::net::TcpListener::bind("0.0.0.0:$PORT").await.unwrap();
     axum::serve(listener, app).await.unwrap();
 }
 
