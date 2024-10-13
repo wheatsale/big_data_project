@@ -5,6 +5,7 @@ edition = "2021"
 
 [dependencies]
 askama = { version = "0.12.1", features = ["serde", "with-axum"] }
+askama_axum = "0.4.0"
 axum = { version = "0.7.7", features = ["macros"] }
 diesel = "2.2.4"
 roux = "2.2.13"
