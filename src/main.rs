@@ -18,7 +18,7 @@ fn static_file(path: &str) -> Result<String, io::Error> {
     // release folder (ie. via Heroku).
     let dir = match option_env!("CARGO_MANIFEST_DIR") {
         Some(env) => env,
-        None => ""
+        None => "/app"
     };
 
     let path = PathBuf::from(format!("{dir}/{path}"));
