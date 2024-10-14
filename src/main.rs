@@ -27,7 +27,7 @@ fn static_file(path: &str) -> Result<String, io::Error> {
         }
     };
 
-    println!("{:?}", path);
+    return Ok(format!("{:?}", path));
 
     let mut file = File::open(path)?;
     let mut buffer = String::new();
