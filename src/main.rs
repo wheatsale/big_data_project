@@ -22,7 +22,7 @@ fn static_file(path: &str) -> Result<String, io::Error> {
         Some(dir) => PathBuf::from(format!("{dir}/{path}")),
         None => {
             let mut curr = current_dir()?;
-            curr.push("resources");
+            curr.push("/resources");
             curr
         }
     };
