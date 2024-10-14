@@ -1,1 +1,1 @@
-web: ./target/release/big_data_project
+web: cargo run --release
