@@ -50,7 +50,7 @@ async fn main() {
 async fn root() -> impl IntoResponse {
     match static_file("resources/static/templates/index.html") {
         Ok(content) => Html(content).into_response(),
-        Err(err) => (StatusCode::NOT_FOUND, format!("{} {:?}", err.to_string(), fs::read_dir(current_dir().unwrap()).unwrap())).into_response()
+        Err(err) => (StatusCode::NOT_FOUND, format!("{} {:?}", err.to_string(), fs::read_dir(current_dir().unwrap()).unwrap().collect())).into_response()
     }
 }
 
