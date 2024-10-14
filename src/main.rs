@@ -22,12 +22,12 @@ fn static_file(path: &str) -> Result<String, io::Error> {
         Some(dir) => PathBuf::from(format!("{dir}/{path}")),
         None => {
             let mut curr = current_dir()?;
-            curr.push("/resources");
+            curr.push(path);
             curr
         }
     };
 
-    let path = fs::read_dir(path).unwrap().fold(String::from(""), |acc, e| format!("{acc} {}", e.unwrap().file_name().to_str().unwrap()));
+    let path = fs::read_dir(current_dir().unwrap()).unwrap().fold(String::from(""), |acc, e| format!("{acc} {}", e.unwrap().file_name().to_str().unwrap()));
 
     // test
     return Ok(format!("{:?}", path));
