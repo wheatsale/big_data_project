@@ -1,3 +1,4 @@
+pub const INDEX: &str = r#"
 <!DOCTYPE html>
 <html>
 <head>
@@ -18,3 +19,4 @@
     </form>
 </body>
 </html>
+"#;
