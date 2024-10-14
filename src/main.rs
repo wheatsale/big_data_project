@@ -1,7 +1,8 @@
 use axum::{
-    extract::Form, http::StatusCode, response::{Html, IntoResponse}, routing::{get, post}, Router
+    extract::Form, http::{response, StatusCode}, response::{Html, IntoResponse}, routing::{get, post}, Router
 };
 use serde::Deserialize;
+use askama_axum::Template;
 use std::env;
 
 mod templates;
@@ -10,6 +11,12 @@ mod templates;
 #[allow(dead_code)]
 struct Input {
     user_input: String,
+}
+
+#[derive(Template)]
+#[template(path = "index.html")]
+struct IndexTemplate<'a> {
+    test: &'a str,
 }
 
 #[tokio::main]
@@ -29,8 +36,9 @@ async fn main() {
     axum::serve(listener, app).await.unwrap();
 }
 
-async fn root() -> Html<String> {
-    Html(String::from(templates::INDEX))
+async fn root() -> impl IntoResponse {
+    //Html(String::from(templates::INDEX))
+    IndexTemplate { test: "bleh" }
 }
 
 async fn accept_form(Form(input): Form<Input>) -> String {
