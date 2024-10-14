@@ -16,12 +16,16 @@ struct Input {
 fn static_file(path: &str) -> Result<String, io::Error> {
     // Use CARGO_MANIFEST_DIR if run via "cargo run" and look two directories down if run from the
     // release folder (ie. via Heroku).
-    let dir = match option_env!("CARGO_MANIFEST_DIR") {
-        Some(env) => env,
-        None => "/app"
-    };
+    let dir = option_env!("CARGO_MANIFEST_DIR");
 
-    let path = PathBuf::from(format!("{dir}/{path}"));
+    let path = match dir {
+        Some(dir) => PathBuf::from(format!("{dir}/{path}")),
+        None => {
+            let mut curr = current_dir()?;
+            curr.push(path);
+            curr
+        }
+    };
 
     let mut file = File::open(path)?;
     let mut buffer = String::new();
