@@ -17,8 +17,11 @@ fn static_file(path: &str) -> Result<String, io::Error> {
     // Use CARGO_MANIFEST_DIR if run via "cargo run" and look two directories down if run from the
     // release folder (ie. via Heroku).
     let dir = match option_env!("CARGO_MANIFEST_DIR") {
-        Some(env) => env,
-        None => "../.."
+        Some(env) => String::from(env),
+        None => match env::var("BUILD_DIR") {
+            Ok(env) => env,
+            Err(_) => String::from("../..")
+        }
     };
 
     let path = PathBuf::from(format!("{dir}/{path}"));
