@@ -1,11 +1,9 @@
 use axum::{
-    extract::Form, http::{response, StatusCode}, response::{Html, IntoResponse}, routing::{get, post}, Router
+    extract::Form, http::StatusCode, response::IntoResponse, routing::{get, post}, Router
 };
 use serde::Deserialize;
 use askama_axum::Template;
 use std::env;
-
-mod templates;
 
 #[derive(Deserialize, Debug)]
 #[allow(dead_code)]
@@ -37,7 +35,6 @@ async fn main() {
 }
 
 async fn root() -> impl IntoResponse {
-    //Html(String::from(templates::INDEX))
     IndexTemplate { test: "bleh" }
 }
 
@@ -46,5 +43,5 @@ async fn accept_form(Form(input): Form<Input>) -> String {
 }
 
 async fn handler_404() -> impl IntoResponse {
-    (StatusCode::NOT_FOUND, "file not found")
+    (StatusCode::NOT_FOUND, "path not found")
 }
