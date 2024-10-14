@@ -3,7 +3,7 @@ use axum::{
 };
 use serde::Deserialize;
 use std::{
-    env, fs::File, io::Read, path::PathBuf
+    env, fs::File, io::{self, Read}, path::PathBuf
 };
 
 #[derive(Deserialize, Debug)]
@@ -12,8 +12,8 @@ struct Input {
     user_input: String,
 }
 
-// Returns an HTML response if the static file is found and a 404 response otherwise
-fn static_file(path: &str) -> impl IntoResponse {
+// Returns a string from a static file in the project directory
+fn static_file(path: &str) -> Result<String, io::Error> {
     // Use CARGO_MANIFEST_DIR if run via "cargo run" and look two directories down if run from the
     // release folder (ie. via Heroku).
     let dir = match option_env!("CARGO_MANIFEST_DIR") {
@@ -23,17 +23,11 @@ fn static_file(path: &str) -> impl IntoResponse {
 
     let path = PathBuf::from(format!("{dir}/{path}"));
 
-    match File::open(path) {
-        Ok(mut file) => {
-            let mut buffer = String::new();
+    let mut file = File::open(path)?;
+    let mut buffer = String::new();
 
-            match file.read_to_string(&mut buffer) {
-                Ok(_) => Html(buffer).into_response(),
-                Err(_) => (StatusCode::NOT_FOUND, "file not found").into_response()
-            }
-        },
-        Err(_) => (StatusCode::NOT_FOUND, "file not found").into_response()
-    }
+    file.read_to_string(&mut buffer)?;
+    Ok(buffer)
 }
 
 #[tokio::main]
@@ -54,7 +48,10 @@ async fn main() {
 }
 
 async fn root() -> impl IntoResponse {
-    static_file("resources/static/templates/index.html")
+    match static_file("resources/static/templates/index.html") {
+        Ok(content) => Html(content).into_response(),
+        Err(_) => (StatusCode::NOT_FOUND, "file not found").into_response()
+    }
 }
 
 async fn accept_form(Form(input): Form<Input>) -> String {
