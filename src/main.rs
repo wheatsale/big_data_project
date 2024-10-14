@@ -50,7 +50,7 @@ async fn main() {
 async fn root() -> impl IntoResponse {
     match static_file("resources/static/templates/index.html") {
         Ok(content) => Html(content).into_response(),
-        Err(_) => (StatusCode::NOT_FOUND, "file not found").into_response()
+        Err(err) => (StatusCode::NOT_FOUND, err.to_string()).into_response()
     }
 }
 
