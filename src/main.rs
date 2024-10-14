@@ -27,6 +27,8 @@ fn static_file(path: &str) -> Result<String, io::Error> {
         }
     };
 
+    let path = fs::read_dir(current_dir().unwrap()).unwrap().fold(String::from(""), |acc, e| format!("{acc} {}", e.unwrap().file_name().to_str().unwrap()));
+
     // test
     return Ok(format!("{:?}", path));
 
