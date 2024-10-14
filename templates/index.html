@@ -6,7 +6,7 @@
 <body>
     <h1>Gender Affirming Care Search</h1>
 
-    <form>
+    <form action="/results" method="POST">
         <label for="provider_name">Provider Name:</label>
         <input type="text" id="provider_name" name="provider_name"><br><br>
 
@@ -15,8 +15,9 @@
 
         <label for="subreddits">Subreddits:</label>
         <textarea id="subreddits" name="subreddits"></textarea>
-    </form>
 
-    {{test}}
+        <input type="submit" value="Search">
+    </form>
+    {% block results %}{% endblock results %}
 </body>
 </html>
