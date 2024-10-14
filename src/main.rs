@@ -3,7 +3,7 @@ use axum::{
 };
 use serde::Deserialize;
 use std::{
-    env, fs::File, io::{self, Read}, path::PathBuf
+    env::{self, current_dir}, fs::File, io::{self, Read}, path::PathBuf
 };
 
 #[derive(Deserialize, Debug)]
@@ -50,7 +50,7 @@ async fn main() {
 async fn root() -> impl IntoResponse {
     match static_file("resources/static/templates/index.html") {
         Ok(content) => Html(content).into_response(),
-        Err(err) => (StatusCode::NOT_FOUND, err.to_string()).into_response()
+        Err(err) => (StatusCode::NOT_FOUND, format!("{} {:?}", err.to_string(), current_dir())).into_response()
     }
 }
 
