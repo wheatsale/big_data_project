@@ -1,4 +1,4 @@
-use roux::{ self, Subreddit };
+use roux::{self, Subreddit};
 
 #[derive(Debug)]
 pub struct Post {

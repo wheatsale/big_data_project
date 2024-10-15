@@ -8,6 +8,7 @@ use std::env;
 mod reddit_scraper;
 pub mod models;
 pub mod schema;
+pub mod data;
 
 #[tokio::main]
 async fn main() {
