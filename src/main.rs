@@ -68,7 +68,7 @@ async fn search(Form(search): Form<SearchInput>) -> impl IntoResponse {
     let mut subreddit_results = String::new();
 
     for post in results {
-        subreddit_results = format!("{subreddit_results}\n{}", post.title);
+        subreddit_results = format!("{subreddit_results} - {}", post.title);
     }
 
     ResultsTemplate{ 
