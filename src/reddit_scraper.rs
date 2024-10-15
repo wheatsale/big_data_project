@@ -1,9 +1,4 @@
-use roux::{ self, Subreddit, Reddit };
-use std::env;
-
-//fn authorize() {
-
-//}
+use roux::{ self, Subreddit };
 
 #[derive(Debug)]
 pub struct Post {
