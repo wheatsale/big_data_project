@@ -2,7 +2,6 @@ use axum::{
     extract::{Form, Json}, http::StatusCode, response::IntoResponse, routing::{get, post}, Router
 };
 use serde::Deserialize;
-use serde_json;
 use askama_axum::Template;
 use std::env;
 use data::RawPost;
