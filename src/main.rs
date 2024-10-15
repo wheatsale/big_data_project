@@ -6,6 +6,8 @@ use askama_axum::Template;
 use std::env;
 
 mod reddit_scraper;
+pub mod models;
+pub mod schema;
 
 #[tokio::main]
 async fn main() {
