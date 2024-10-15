@@ -75,7 +75,7 @@ impl Post {
 
 #[derive(Debug)]
 pub struct Comment {
-    id: Option<String>,
+    id: String,
     post_id: String,
     parent_id: Option<String>,
     author: Option<String>,
@@ -130,19 +130,22 @@ pub async fn scrape_subreddit(name: &str) -> Vec<Post> {
             Some(post.num_comments.try_into().unwrap_or(100))
         ).await {
             Ok(comments) => {
-                comments.data.children.iter().map(|comment| {
+                comments.data.children.iter().filter_map(|comment| {
                     let comment = &comment.data;
-                    Comment {
-                        id: comment.id.clone(),
-                        post_id: post.id.clone(),
-                        parent_id: comment.parent_id.clone(),
-                        author: comment.author.clone(),
-                        permalink: comment.permalink.clone(),
-                        body_html: comment.body_html.clone(),
-                        over_18: comment.over_18,
-                        score: comment.score,
-                        ups: comment.ups,
-                        downs: comment.downs,
+                    match &comment.id {
+                        Some(id) =>  { Some(Comment {
+                            id: id.clone(),
+                            post_id: post.id.clone(),
+                            parent_id: comment.parent_id.clone(),
+                            author: comment.author.clone(),
+                            permalink: comment.permalink.clone(),
+                            body_html: comment.body_html.clone(),
+                            over_18: comment.over_18,
+                            score: comment.score,
+                            ups: comment.ups,
+                            downs: comment.downs,
+                        })},
+                        None => None
                     }
                 }).collect()
             }
