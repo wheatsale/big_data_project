@@ -41,7 +41,6 @@ async fn root() -> impl IntoResponse {
 struct SearchInput {
     provider_name: String,
     care_type: String,
-    subreddits: String,
 }
 
 #[derive(Template)]
