@@ -5,6 +5,8 @@ use serde::Deserialize;
 use askama_axum::Template;
 use std::env;
 
+mod reddit_scraper;
+
 #[tokio::main]
 async fn main() {
     let app = Router::new().route("/", get(root));
