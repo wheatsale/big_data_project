@@ -17,7 +17,7 @@ async fn main() {
 
     let port = match env::var("PORT") {
         Ok(val) => val,
-        Err(_) => String::from("80"),
+        Err(_) => String::from("8080"),
     };
 
     let listener = tokio::net::TcpListener::bind(format!("0.0.0.0:{port}")).await.unwrap();
