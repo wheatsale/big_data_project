@@ -5,6 +5,7 @@ use serde::Deserialize;
 use askama_axum::Template;
 use std::env;
 use data::RawPost;
+use diesel::prelude::*;
 
 pub mod models;
 pub mod schema;
@@ -52,9 +53,24 @@ struct ResultsTemplate {
 }
 
 async fn search(Form(search): Form<SearchInput>) -> impl IntoResponse {
+    use self::schema::posts::dsl::*;
+    use self::models::Post;
+
     let provider_result = format!("You searched for {}", search.provider_name);
     let care_result = format!("You searched for {}", search.care_type);
-    let subreddit_results = format!("You searched for {}", search.subreddits);
+    
+    let connection = &mut data::establish_connection();
+    let results = posts
+            .limit(5)
+            .select(Post::as_select())
+            .load(connection)
+            .expect("Error loading posts");
+
+    let mut subreddit_results = String::new();
+
+    for post in results {
+        subreddit_results = format!("{subreddit_results}\n{}", post.title);
+    }
 
     ResultsTemplate{ 
         provider: provider_result,
