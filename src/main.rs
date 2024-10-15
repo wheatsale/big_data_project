@@ -1,9 +1,11 @@
 use axum::{
-    extract::Form, http::StatusCode, response::IntoResponse, routing::{get, post}, Router
+    extract::{Form, Json}, http::StatusCode, response::IntoResponse, routing::{get, post}, Router
 };
 use serde::Deserialize;
+use serde_json;
 use askama_axum::Template;
 use std::env;
+use data::RawPost;
 
 pub mod models;
 pub mod schema;
@@ -12,8 +14,8 @@ pub mod data;
 #[tokio::main]
 async fn main() {
     let app = Router::new().route("/", get(root));
-
     let app = app.route("/results", post(search));
+    let app = app.route("/posts", post(insert_posts));
 
     let app = app.fallback(handler_404);
 
@@ -60,6 +62,10 @@ async fn search(Form(search): Form<SearchInput>) -> impl IntoResponse {
         care: care_result,
         subreddits: subreddit_results
     }
+}
+
+async fn insert_posts(Json(payload): Json<Vec<RawPost>>) {
+    data::insert_posts(payload).await.unwrap();
 }
 
 async fn handler_404() -> impl IntoResponse {

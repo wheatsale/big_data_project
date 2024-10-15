@@ -6,7 +6,7 @@ use dotenvy::dotenv;
 use std::env;
 
 #[derive(Debug, Serialize, Deserialize)]
-struct RawPost {
+pub struct RawPost {
     id: String,
     title: String,
     content: String,
@@ -44,10 +44,9 @@ pub fn establish_connection() -> PgConnection {
         .unwrap_or_else(|_| panic!("Error connecting to {}", database_url))
 }
 
-pub async fn insert_posts(posts: &str) -> Result<(), serde_json::error::Error> {
+pub async fn insert_posts(posts: Vec<RawPost>) -> Result<(), diesel::result::Error> {
     let mut connection = establish_connection();
 
-    let posts: Vec<RawPost> = serde_json::from_str(posts)?;
     for post in posts {
         create_post(
             &mut connection,
@@ -63,7 +62,7 @@ pub async fn insert_posts(posts: &str) -> Result<(), serde_json::error::Error> {
             BigDecimal::from_f64(post.ups).unwrap(),
             BigDecimal::from_f64(post.downs).unwrap(),
             BigDecimal::from_f64(post.created).unwrap()
-        ).await.unwrap();
+        ).await?;
 
         for comment in post.comments {
             create_comment(
@@ -87,7 +86,7 @@ pub async fn insert_posts(posts: &str) -> Result<(), serde_json::error::Error> {
                     Some(downs) => Some(BigDecimal::from_i32(downs).unwrap()),
                     None => None
                 },
-            ).await.unwrap();
+            ).await?;
         }
     }
 
