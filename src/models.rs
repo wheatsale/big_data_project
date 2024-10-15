@@ -1,9 +1,10 @@
-use diesel::prelude::*;
+use diesel::{pg::Pg, prelude::*};
 use bigdecimal::BigDecimal;
+use crate::schema;
 
-#[derive(Queryable, Selectable)]
-#[diesel(table_name = crate::schema::posts)]
-#[diesel(check_for_backend(diesel::pg::Pg))]
+#[derive(Insertable, Queryable, Selectable)]
+#[diesel(table_name = schema::posts)]
+#[diesel(check_for_backend(Pg))]
 pub struct Post {
     pub title: String,
     pub id: String,
@@ -19,9 +20,9 @@ pub struct Post {
     pub created: BigDecimal,
 }
 
-#[derive(Queryable, Selectable)]
-#[diesel(table_name = crate::schema::comments)]
-#[diesel(check_for_backend(diesel::pg::Pg))]
+#[derive(Insertable, Queryable, Selectable)]
+#[diesel(table_name = schema::comments)]
+#[diesel(check_for_backend(Pg))]
 pub struct Comment {
     pub id: String,
     pub post_id: String,
