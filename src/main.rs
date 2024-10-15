@@ -5,7 +5,6 @@ use serde::Deserialize;
 use askama_axum::Template;
 use std::env;
 
-mod reddit_scraper;
 pub mod models;
 pub mod schema;
 pub mod data;
